@@ -1,7 +1,7 @@
 {
 	"name": "project-chef",
 	"version": "1.0.0",
-	"main": "src/index.ts",
+	"main": "index.ts",
 	"author": "Tolga Erdönmez",
 	"license": "MIT",
 	"private": true,
@@ -9,6 +9,7 @@
 		"@types/inquirer": "^6.5.0",
 		"@types/ncp": "^2.0.4",
 		"@types/node": "^14.0.13",
+		"@types/nodegit": "^0.26.5",
 		"typescript": "^3.9.5"
 	},
 	"dependencies": {
