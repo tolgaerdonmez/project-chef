@@ -1,0 +1,5 @@
+{
+	"packages": ["express", "body-parser", "cors", "dotenv"],
+	"devPackages": ["@babel/plugin-proposal-decorators", "@babel/plugin-proposal-class-properties"],
+	"configs": []
+}

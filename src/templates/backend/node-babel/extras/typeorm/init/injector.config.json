@@ -1,0 +1,5 @@
+{
+	"configs": [{ "file": "babel.config.json", "appenders": ["plugins"] }],
+	"packages": ["typeorm", "sqlite3"],
+	"devPackages": ["@babel/plugin-proposal-decorators", "@babel/plugin-proposal-class-properties"]
+}
