@@ -1,6 +1,7 @@
 import { join } from "path";
 import { CustomAnswers } from "../types/customAnswers";
 import { StackPaths } from "../types/paths";
+import { readdirSync } from "fs";
 
 const basePath = join(__dirname, "../templates");
 export const stackPath = (stack: string) => join(basePath, stack);
@@ -15,7 +16,11 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 		const extrasPaths = extras
 			? extras.map(e => {
 					const base = join(stackPath(stack), framework, "extras", e);
-					return { name: e, path: join(base, "main"), initializer: join(base, "init") };
+					const baseDirs = readdirSync(base);
+					const hasMain = baseDirs.findIndex(x => x === "main") > -1;
+					const hasInit = baseDirs.findIndex(x => x === "init") > -1;
+					if (!hasMain) throw new Error("main directory for extra package not found!");
+					return { name: e, path: join(base, "main"), initializer: hasInit ? join(base, "init") : undefined };
 			  })
 			: [];
 

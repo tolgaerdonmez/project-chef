@@ -21,17 +21,22 @@ export const createStackFrameworkSelect = (stack: string) => ({
 });
 
 export const frameworkExtrasSelect = (stack: string, framework: string): Question | null => {
-	const extrasPath = join(stackPath(stack), framework, "extras"); // templates/{stack}/{framework}/extras
-	const stat = statSync(extrasPath);
-	if (stat.isDirectory()) {
-		const extras = readdirSync(extrasPath);
-		const question = {
-			type: "checkbox",
-			name: stack + "Extras",
-			message: `Extra packages for ${framework}?`,
-			choices: extras,
-		};
-		return question;
+	try {
+		const extrasPath = join(stackPath(stack), framework, "extras"); // templates/{stack}/{framework}/extras
+		const stat = statSync(extrasPath);
+		if (stat.isDirectory()) {
+			const extras = readdirSync(extrasPath);
+			const question = {
+				type: "checkbox",
+				name: stack + "Extras",
+				message: `Extra packages for ${framework}?`,
+				choices: extras,
+			};
+			return question;
+		}
+		return null;
+	} catch (err) {
+		// console.log(err);
+		return null;
 	}
-	return null;
 };

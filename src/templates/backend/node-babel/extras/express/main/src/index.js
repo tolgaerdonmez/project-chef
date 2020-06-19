@@ -1,12 +1,10 @@
 import "dotenv/config";
-import { createConnection } from "typeorm";
 import Express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import userRouter from "./routes/user";
 
 async function main() {
-	await createConnection();
 	const app = Express();
 
 	app.use(bodyParser.urlencoded({ extended: false }));
