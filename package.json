@@ -2,7 +2,7 @@
 	"name": "project-chef",
 	"version": "1.0.0",
 	"main": "index.ts",
-	"bin": "index.ts",
+	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
 	"license": "MIT",
 	"private": true,
@@ -27,6 +27,7 @@
 	},
 	"scripts": {
 		"start": "ts-node .",
-		"dev": "DEV=true ts-node ."
+		"dev": "DEV=true ts-node .",
+		"build": "tsc"
 	}
 }

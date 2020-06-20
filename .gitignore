@@ -3,3 +3,5 @@ node_modules
 *.log
 templates
 .DS_Store
+package-lock.json
+dist
