@@ -2,7 +2,7 @@ import inquirer, { QuestionCollection, Answers, Question } from "inquirer";
 import fs from "fs";
 import { join } from "path";
 import { CustomAnswers } from "./types/customAnswers";
-import { createStackPaths } from "./paths/stacks";
+import { createStackPaths, basePath as baseTemplatePath } from "./paths/stacks";
 import { selectStacks, createStackFrameworkSelect, frameworkExtrasSelect } from "./questions/stacks";
 import { copyContents } from "./utils/file";
 import { StackPaths } from "./types/paths";
@@ -101,6 +101,15 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 
 	// creating main frameworks for stacks
 	fs.mkdirSync(join(process.cwd(), projectName));
+
+	// copying general dot files like prettierrc or gitignore
+	const files = fs.readdirSync(baseTemplatePath);
+	const essentials = files.filter(f => !(f === ".git" || f === "frontend" || f === "backend"));
+	essentials.forEach(f => {
+		const p = join(baseTemplatePath, f);
+		fs.copyFileSync(p, join(process.cwd(), projectName, f));
+	});
+
 	stacks.forEach(stack => {
 		// copying contents for both stacks
 		stackPaths[stack].forEach(async ({ path, extras }) => {

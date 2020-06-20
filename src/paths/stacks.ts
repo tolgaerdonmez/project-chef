@@ -3,7 +3,7 @@ import { CustomAnswers } from "../types/customAnswers";
 import { StackPaths } from "../types/paths";
 import { readdirSync } from "fs";
 
-const basePath = join(__dirname, "../../templates");
+export const basePath = join(__dirname, "../../templates");
 export const stackPath = (stack: string) => join(basePath, stack);
 
 export function createStackPaths(stacks: string[], data: CustomAnswers): StackPaths {
