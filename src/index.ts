@@ -9,6 +9,7 @@ import { StackPaths } from "./types/paths";
 import { Subject } from "rxjs";
 import Injector from "./utils/Injector";
 import { installPackages } from "./utils/commands";
+import { infoMessage, errorMessage, successMessage } from "./utils/messages";
 
 const prompts = new Subject<Question>();
 let selectedStacks: string[] = [];
@@ -26,6 +27,7 @@ const onStacksAnswered = (name: string, answer: string) => {
 };
 
 const onEachAnswer = ({ name, answer }: Answers) => {
+	console.clear();
 	switch (name) {
 		case "stacks": {
 			selectedStacks = answer; // setting to global var
@@ -69,17 +71,17 @@ const projectName = {
 		} catch (error) {
 			switch (error.message) {
 				case "file exists":
-					return "A directory named " + input + " already exists!";
+					return errorMessage("A directory named " + input + " already exists!");
 
 				case "invalid name":
-					return "Project name may only include letters, numbers, underscores and hashes.";
+					return errorMessage("Project name may only include letters, numbers, underscores and hashes.");
 
 				default:
-					return error.message;
+					return errorMessage(error.message);
 			}
 		}
 	},
-	default: "awesome-project",
+	default: "chefs-special",
 };
 
 const prompt = inquirer.prompt(prompts as QuestionCollection);
@@ -98,8 +100,6 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 	const fullStack = stacks.length === 2;
 
 	// creating main frameworks for stacks
-	console.log(stackPaths);
-
 	fs.mkdirSync(join(process.cwd(), projectName));
 	stacks.forEach(stack => {
 		// copying contents for both stacks
@@ -110,19 +110,21 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 				? join(process.cwd(), projectName, folderName)
 				: join(process.cwd(), projectName);
 
-			await copyContents(path, targetPath);
 			// installing main module dependencies
-			console.log(stack + ": Installing core dependencies...");
+			console.log(infoMessage(stack + ": Installing core dependencies..."));
+			await copyContents(path, targetPath);
 			installPackages(targetPath);
-
-			console.log(stack + ": Installing extra dependencies...");
-			extras.forEach(async ({ path, initializer }) => {
+			extras.forEach(async ({ path, initializer, name }) => {
 				try {
+					console.log(infoMessage(`Installing packages for ${name}`));
 					await copyContents(path, targetPath);
 					// adding needed configs to target project using Injector
-					if (initializer) await Injector.inject({ projectPath: targetPath, referencePath: initializer });
+					if (initializer) {
+						await Injector.inject({ projectPath: targetPath, referencePath: initializer });
+					}
+					console.log(successMessage(`${name} installed`));
 				} catch (err) {
-					console.error(err.message);
+					console.log(errorMessage(err.message));
 				}
 			});
 		});

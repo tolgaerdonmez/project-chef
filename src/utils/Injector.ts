@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { join, dirname } from "path";
+import { join } from "path";
 import { statSync, writeFileSync } from "fs";
 
 const isDev = !!process.env.DEV;
