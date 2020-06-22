@@ -66,7 +66,6 @@ export default class Injector {
 					targetField = getNestedFields([...fields], targetConfig);
 					referenceField = getNestedFields([...fields], referenceConfig);
 					field = fields[fields.length - 1];
-					console.log("referenceField", referenceField, targetField);
 				} else {
 					targetField = targetConfig[field];
 					referenceField = referenceConfig[field];
@@ -76,12 +75,9 @@ export default class Injector {
 				if (Array.isArray(targetField[field])) {
 					targetField[field] = [...targetField[field], ...referenceField[field]];
 				} else {
-					console.log("changing targetField[field]", targetField[field], referenceField[field]);
-
 					targetField[field] = referenceField[field];
 				}
 			});
-			console.log("writing to config", targetConfig);
 			writeFileSync(join(this.projectPath, file), JSON.stringify(targetConfig));
 		});
 	};
