@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import { join } from "path";
 import { statSync, writeFileSync } from "fs";
+import { getNestedFields } from "./misc";
 
 const isDev = !!process.env.DEV;
 
@@ -57,8 +58,30 @@ export default class Injector {
 			const { default: referenceConfig } = await import(join(this.referencePath, file));
 
 			appenders.forEach(field => {
-				targetConfig[field] = [...targetConfig[field], ...referenceConfig[field]];
+				// if selected a nested field like: {a:{b:1}} -> a.b
+				let targetField;
+				let referenceField;
+				if (field.split(".").length > 1) {
+					const fields = field.split(".");
+					targetField = getNestedFields([...fields], targetConfig);
+					referenceField = getNestedFields([...fields], referenceConfig);
+					field = fields[fields.length - 1];
+					console.log("referenceField", referenceField, targetField);
+				} else {
+					targetField = targetConfig[field];
+					referenceField = referenceConfig[field];
+				}
+
+				// changing the values of target fields
+				if (Array.isArray(targetField[field])) {
+					targetField[field] = [...targetField[field], ...referenceField[field]];
+				} else {
+					console.log("changing targetField[field]", targetField[field], referenceField[field]);
+
+					targetField[field] = referenceField[field];
+				}
 			});
+			console.log("writing to config", targetConfig);
 			writeFileSync(join(this.projectPath, file), JSON.stringify(targetConfig));
 		});
 	};
