@@ -112,16 +112,27 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 			const targetPath = fullStack
 				? join(process.cwd(), projectName, folderName)
 				: join(process.cwd(), projectName);
-			if (path.includes(EMPTY_FOLDER)) {
-				if (fullStack) {
-					fs.mkdirSync(join(process.cwd(), projectName, folderName));
+
+			if (path) {
+				if (path.includes(EMPTY_FOLDER)) {
+					if (fullStack) {
+						fs.mkdirSync(join(process.cwd(), projectName, folderName));
+					}
+					return;
 				}
-				return;
+				// installing main module dependencies
+				console.log(infoMessage(stack + ": Installing core dependencies..."));
+				await copyContents(path, targetPath);
+				installPackages(targetPath);
 			}
-			// installing main module dependencies
-			console.log(infoMessage(stack + ": Installing core dependencies..."));
-			await copyContents(path, targetPath);
-			installPackages(targetPath);
+
+			// if exists running extra initialization for main stack
+			if (initPath && !process.env.DEV) {
+				console.log(infoMessage(stack + ": Installing core dependencies..."));
+				const { default: init }: { default: InitFunction } = await import(initPath);
+				const initArgs: InitFunctionArgs = { folderName: fullStack ? folderName : ".", cwd: targetPath };
+				init(initArgs);
+			}
 
 			// initializing extras
 			extras.forEach(async ({ path, initializer, name }) => {
@@ -137,13 +148,6 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 					console.log(errorMessage(err.message));
 				}
 			});
-
-			// if exists running extra initialization for main stack
-			if (initPath && !process.env.DEV) {
-				const { default: init }: { default: InitFunction } = await import(initPath);
-				const initArgs: InitFunctionArgs = { folderName: fullStack ? folderName : ".", cwd: targetPath };
-				init(initArgs);
-			}
 		});
 	});
 
@@ -152,7 +156,9 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 		!(
 			!fullStack &&
 			stackPaths["frontend"] &&
-			stackPaths["frontend"].filter(x => x.name.includes("nextjs-cli")).length
+			stackPaths["frontend"].filter(
+				({ name }) => name.includes("nextjs") || name.includes("gatsby") || name.includes("create-react-app")
+			).length
 		)
 	) {
 		const files = fs.readdirSync(baseTemplatePath);

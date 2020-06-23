@@ -17,6 +17,8 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 
 		const templatePath = join(stackPath(stack), framework, "main"); // templates/{stack}/{framework}/main
 		const initPath = join(stackPath(stack), framework, "init"); // templates/{stack}/{framework}/init
+
+		const templateExists = existsSync(templatePath);
 		const initExists = existsSync(initPath);
 
 		const extrasPaths = extras
@@ -31,7 +33,7 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 			: [];
 
 		paths[stack].push({
-			path: templatePath,
+			path: templateExists ? templatePath : undefined,
 			initPath: initExists ? initPath : undefined,
 			name: framework,
 			extras: extrasPaths,
