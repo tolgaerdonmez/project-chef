@@ -2,6 +2,8 @@ import { readdirSync, statSync } from "fs";
 import { stackPath } from "../paths/stacks";
 import { join } from "path";
 import { Question } from "inquirer";
+import kleur from "kleur";
+import { EMPTY_FOLDER } from "../constants";
 
 export const BACKEND_CHOICES: string[] = readdirSync(stackPath("backend"));
 export const FRONTEND_CHOICES: string[] = readdirSync(stackPath("frontend"));
@@ -13,12 +15,16 @@ export const selectStacks = {
 	choices: ["frontend", "backend"],
 };
 
-export const createStackFrameworkSelect = (stack: string) => ({
-	name: stack,
-	type: "list",
-	message: `Which ${stack} framework`,
-	choices: stack === "frontend" ? FRONTEND_CHOICES : BACKEND_CHOICES,
-});
+export const createStackFrameworkSelect = (stack: string) => {
+	const question = {
+		name: stack,
+		type: "list",
+		message: `Which ${stack} framework`,
+		choices: stack === "frontend" ? FRONTEND_CHOICES : BACKEND_CHOICES,
+	};
+	question.choices.push(kleur.italic(EMPTY_FOLDER));
+	return question;
+};
 
 export const frameworkExtrasSelect = (stack: string, framework: string): Question | null => {
 	try {

@@ -9,7 +9,9 @@ import { StackPaths } from "./types/paths";
 import { Subject } from "rxjs";
 import Injector from "./utils/Injector";
 import { installPackages } from "./utils/commands";
-import { infoMessage, errorMessage, successMessage } from "./utils/messages";
+import { infoMessage, errorMessage, successMessage } from "../utils/messages";
+import { InitFunction, InitFunctionArgs } from "../types/templates";
+import { EMPTY_FOLDER } from "./constants";
 
 const prompts = new Subject<Question>();
 let selectedStacks: string[] = [];
@@ -102,27 +104,26 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 	// creating main frameworks for stacks
 	fs.mkdirSync(join(process.cwd(), projectName));
 
-	// copying general dot files like prettierrc or gitignore
-	const files = fs.readdirSync(baseTemplatePath);
-	const essentials = files.filter(f => !(f === ".git" || f === "frontend" || f === "backend"));
-	essentials.forEach(f => {
-		const p = join(baseTemplatePath, f);
-		fs.copyFileSync(p, join(process.cwd(), projectName, f));
-	});
-
 	stacks.forEach(stack => {
 		// copying contents for both stacks
-		stackPaths[stack].forEach(async ({ path, extras }) => {
+		stackPaths[stack].forEach(async ({ path, extras, initPath }) => {
 			const folderName = stack === "frontend" ? "client" : "server";
 			// separate folders if fullstack -> client & server
 			const targetPath = fullStack
 				? join(process.cwd(), projectName, folderName)
 				: join(process.cwd(), projectName);
-
+			if (path.includes(EMPTY_FOLDER)) {
+				if (fullStack) {
+					fs.mkdirSync(join(process.cwd(), projectName, folderName));
+				}
+				return;
+			}
 			// installing main module dependencies
 			console.log(infoMessage(stack + ": Installing core dependencies..."));
 			await copyContents(path, targetPath);
 			installPackages(targetPath);
+
+			// initializing extras
 			extras.forEach(async ({ path, initializer, name }) => {
 				try {
 					console.log(infoMessage(`Installing packages for ${name}`));
@@ -136,8 +137,32 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 					console.log(errorMessage(err.message));
 				}
 			});
+
+			// if exists running extra initialization for main stack
+			if (initPath && !process.env.DEV) {
+				const { default: init }: { default: InitFunction } = await import(initPath);
+				const initArgs: InitFunctionArgs = { folderName: fullStack ? folderName : ".", cwd: targetPath };
+				init(initArgs);
+			}
 		});
 	});
+
+	// copying general dot files like prettierrc or gitignore
+	if (
+		!(
+			!fullStack &&
+			stackPaths["frontend"] &&
+			stackPaths["frontend"].filter(x => x.name.includes("nextjs-cli")).length
+		)
+	) {
+		const files = fs.readdirSync(baseTemplatePath);
+		const essentials = files.filter(f => !(f === ".git" || f === "frontend" || f === "backend"));
+		essentials.forEach(f => {
+			const p = join(baseTemplatePath, f);
+			const dest = join(process.cwd(), projectName, f);
+			if (!fs.existsSync(dest)) fs.copyFileSync(p, dest);
+		});
+	}
 });
 
 prompts.next(projectName);

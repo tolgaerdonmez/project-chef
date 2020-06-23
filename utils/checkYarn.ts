@@ -1,5 +1,5 @@
 import { execSync } from "child_process";
-import { errorMessage, infoMessage, successMessage } from "../src/utils/messages";
+import { errorMessage, infoMessage, successMessage } from "./messages";
 
 export const checkYarn = () => {
 	try {

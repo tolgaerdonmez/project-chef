@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { getTemplates } from "./utils/templates";
-import { packageMessage, infoMessage } from "./src/utils/messages";
+import { packageMessage, infoMessage } from "./utils/messages";
 import ora from "ora";
 import { checkYarn } from "./utils/checkYarn";
 

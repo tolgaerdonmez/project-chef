@@ -1,7 +1,8 @@
 import { join } from "path";
 import { CustomAnswers } from "../types/customAnswers";
 import { StackPaths } from "../types/paths";
-import { readdirSync } from "fs";
+import { readdirSync, existsSync } from "fs";
+import { EMPTY_FOLDER } from "../constants";
 
 export const basePath = join(__dirname, "../../templates");
 export const stackPath = (stack: string) => join(basePath, stack);
@@ -10,10 +11,13 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 	const paths: StackPaths = { frontend: [], backend: [] };
 	stacks.forEach(stack => {
 		const framework = data[stack];
+		if (framework === EMPTY_FOLDER) return;
+
 		const extras: string[] = data[stack + "Extras"];
 
 		const templatePath = join(stackPath(stack), framework, "main"); // templates/{stack}/{framework}/main
 		const initPath = join(stackPath(stack), framework, "init"); // templates/{stack}/{framework}/init
+		const initExists = existsSync(initPath);
 
 		const extrasPaths = extras
 			? extras.map(e => {
@@ -26,7 +30,12 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 			  })
 			: [];
 
-		paths[stack].push({ path: templatePath, initPath, name: framework, extras: extrasPaths }); // name = {framework}
+		paths[stack].push({
+			path: templatePath,
+			initPath: initExists ? initPath : undefined,
+			name: framework,
+			extras: extrasPaths,
+		}); // name = {framework}
 	});
 	return paths;
 }
