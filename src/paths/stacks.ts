@@ -13,6 +13,8 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 		const extras: string[] = data[stack + "Extras"];
 
 		const templatePath = join(stackPath(stack), framework, "main"); // templates/{stack}/{framework}/main
+		const initPath = join(stackPath(stack), framework, "init"); // templates/{stack}/{framework}/init
+
 		const extrasPaths = extras
 			? extras.map(e => {
 					const base = join(stackPath(stack), framework, "extras", e);
@@ -24,7 +26,7 @@ export function createStackPaths(stacks: string[], data: CustomAnswers): StackPa
 			  })
 			: [];
 
-		paths[stack].push({ path: templatePath, name: framework, extras: extrasPaths }); // name = {framework}
+		paths[stack].push({ path: templatePath, initPath, name: framework, extras: extrasPaths }); // name = {framework}
 	});
 	return paths;
 }

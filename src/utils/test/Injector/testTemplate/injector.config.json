@@ -1,0 +1,5 @@
+{
+	"configs": [{ "file": "test.config.json", "appenders": ["testField.testThis", "plugins"] }],
+	"devPackages": ["test-dev-package"],
+	"packages": ["test-package"]
+}

@@ -32,6 +32,6 @@
 		"start": "ts-node .",
 		"dev": "DEV=true ts-node .",
 		"build": "tsc",
-		"test": "jest"
+		"test": "DEV=true jest"
 	}
 }

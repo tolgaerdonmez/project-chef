@@ -34,11 +34,11 @@ export default class Injector {
 	configs: ConfigResolver;
 
 	constructor({ packages, devPackages, configs, projectPath, referencePath }: InjectorConstructor) {
-		if (packages && devPackages && configs) {
-			this.packages = packages;
-			this.devPackages = devPackages;
-			this.configs = configs;
-		}
+		// if (packages && devPackages && configs) {
+		this.packages = packages || [];
+		this.devPackages = devPackages || [];
+		this.configs = configs || [];
+		// }
 		this.projectPath = projectPath;
 		this.referencePath = referencePath;
 	}
@@ -67,13 +67,12 @@ export default class Injector {
 					referenceField = getNestedFields([...fields], referenceConfig);
 					field = fields[fields.length - 1];
 				} else {
-					targetField = targetConfig[field];
-					referenceField = referenceConfig[field];
+					targetField = targetConfig; //[field];
+					referenceField = referenceConfig; //[field];
 				}
-
 				// changing the values of target fields
 				if (Array.isArray(targetField[field])) {
-					targetField[field] = [...targetField[field], ...referenceField[field]];
+					targetField[field] = [...targetField[field], ...referenceConfig[field]];
 				} else {
 					targetField[field] = referenceField[field];
 				}
@@ -83,31 +82,53 @@ export default class Injector {
 	};
 
 	getConfigFromProject = async (filename: string): Promise<Config | null> => {
-		const configPath = join(this.projectPath, filename);
-		const exists = statSync(configPath).isFile();
-		if (!exists) return null;
+		try {
+			const configPath = join(this.projectPath, filename);
+			const exists = statSync(configPath).isFile();
+			if (!exists) return null;
 
-		const { default: config } = await import(configPath);
-		return config;
+			const { default: config } = await import(configPath);
+			return config;
+		} catch (err) {
+			return null;
+		}
+	};
+
+	static loadFromConfig = async ({
+		projectPath,
+		referencePath,
+	}: {
+		projectPath: string;
+		referencePath: string;
+	}): Promise<Injector | undefined> => {
+		try {
+			const config: InjectorConstructor = {
+				projectPath,
+				referencePath,
+			};
+			const {
+				default: { configs, devPackages, packages },
+			}: { default: InjectorConfig } = await import(join(config.referencePath, "injector.config.json"));
+			config.configs = configs || [];
+			config.packages = packages || [];
+			config.devPackages = devPackages || [];
+
+			const instance = new Injector(config);
+			return instance;
+		} catch (err) {
+			console.log(err);
+			return undefined;
+		}
 	};
 
 	static inject = async (config: InjectorConstructor) => {
 		try {
-			if (!config.configs || !config.devPackages || !config.packages) {
-				const {
-					default: { configs, devPackages, packages },
-				}: { default: InjectorConfig } = await import(join(config.referencePath, "injector.config.json"));
-				config.configs = configs;
-				config.packages = packages;
-				config.devPackages = devPackages;
-
-				if (!config.configs || !config.devPackages || !config.packages) {
-					console.log(config);
-					throw new Error("Config not valid");
-				}
+			const injector = await Injector.loadFromConfig(config);
+			if (!injector) {
+				throw new Error(
+					"Invalid config for Injector, check your injector.config.json or the object being passed to constructor"
+				);
 			}
-
-			const injector = new Injector(config);
 			if (!isDev) {
 				injector.installAllPackages();
 			}

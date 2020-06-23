@@ -1,4 +1,4 @@
-import { alterNestedFields, createNestedFields, getNestedFields } from "../misc";
+import { createNestedFields, getNestedFields } from "../misc";
 
 describe("misc functions test", () => {
 	it("createNestedFields test", () => {

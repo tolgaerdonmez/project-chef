@@ -1,0 +1,4 @@
+{
+	"testField": { "testThis": "hello" },
+	"plugins": ["hello", "world"]
+}

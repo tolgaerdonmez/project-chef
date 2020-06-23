@@ -5,3 +5,4 @@ templates
 .DS_Store
 package-lock.json
 dist
+src/utils/test/Injector/testProject/test.config.json
