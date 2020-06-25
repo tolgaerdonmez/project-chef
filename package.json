@@ -1,11 +1,11 @@
 {
 	"name": "project-chef",
-	"version": "1.0.0",
-	"main": "index.ts",
+	"version": "1.0.1",
+	"main": "dist/index.js",
 	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
 	"license": "MIT",
-	"private": true,
+	"private": false,
 	"devDependencies": {
 		"@types/figlet": "^1.2.0",
 		"@types/inquirer": "^6.5.0",
@@ -29,9 +29,13 @@
 		"ts-node": "^8.10.2"
 	},
 	"scripts": {
-		"start": "ts-node .",
-		"dev": "DEV=true ts-node .",
+		"start": "ts-node index.ts",
+		"dev": "DEV=true ts-node index.ts",
 		"build": "tsc",
 		"test": "DEV=true jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tolgaerdonmez/project-chef"
 	}
 }
