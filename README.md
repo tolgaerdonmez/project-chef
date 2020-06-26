@@ -1,14 +1,7 @@
-<h1 align="center">Welcome to project-chef 👋</h1>
-<p>
-  <img alt="Version" src="https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000" />
-  <a href="#" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
-  </a>
-  <a href="https://twitter.com/tolgaerdonmez" target="_blank">
-    <img alt="Twitter: tolgaerdonmez" src="https://img.shields.io/twitter/follow/tolgaerdonmez.svg?style=social" />
-  </a>
-</p>
+# Welcome to project-chef 👋
 
+![license](https://img.shields.io/github/license/tolgaerdonmez/project-chef)
+[![npm](https://img.shields.io/npm/v/project-chef)](https://www.npmjs.com/package/project-chef)
 > An opinionated boilerplate creator cli for JavaScript/TypeScript applications using node.js
 
 ## Goal
