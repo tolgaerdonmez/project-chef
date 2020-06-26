@@ -1,7 +1,7 @@
 node_modules
 *.lock
 *.log
-templates
+templates*
 .DS_Store
 package-lock.json
 dist
