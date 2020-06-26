@@ -13,11 +13,13 @@ async function main() {
 	const loadingMessage = ora(infoMessage("loading project-chef")).start();
 	loadingMessage.color = "green";
 	// getting the latest templates from github repo
-	const gotTemplates = await getTemplates();
-	if (!gotTemplates) {
-		console.error("Error while fetching templates, try again!");
-		process.exit();
-	}
+
+	// these lines are not used until fixed
+	// const gotTemplates = await getTemplates();
+	// if (!gotTemplates) {
+	// 	console.error("Error while fetching templates, try again!");
+	// 	process.exit();
+	// }
 
 	loadingMessage.stop(); // stopping spinner
 

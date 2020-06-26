@@ -29,6 +29,6 @@ describe("Injector tests", () => {
 		await injector?.handleConfigs();
 		const targetConfig = await import("./testProject/test.config.json");
 		const exampleConfig = await import("./testProject/example.test.config.json");
-		expect(targetConfig).not.toMatchObject(exampleConfig);
+		expect(targetConfig).not.toBe(exampleConfig);
 	});
 });

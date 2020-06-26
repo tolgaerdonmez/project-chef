@@ -45,18 +45,23 @@ export default class Injector {
 
 	installAllPackages = () => {
 		const commands = [
-			`yarn --cwd ${this.projectPath} add ${this.packages.join(" ")}`,
-			`yarn --cwd ${this.projectPath} add -D ${this.devPackages.join(" ")}`,
+			this.packages.length ? `yarn --cwd ${this.projectPath} add ${this.packages.join(" ")}` : "",
+			this.devPackages.length ? `yarn --cwd ${this.projectPath} add -D ${this.devPackages.join(" ")}` : "",
 		];
-		commands.forEach(c => execSync(c));
+		commands.forEach(c => {
+			if (c) execSync(c);
+		});
 	};
 
 	handleConfigs = async () => {
+		if (!this.configs.length) return;
+
 		this.configs.map(async ({ file, appenders }) => {
 			const targetConfig = await this.getConfigFromProject(file);
 			if (!targetConfig) return;
 			const { default: referenceConfig } = await import(join(this.referencePath, file));
 
+			if (!appenders.length) return;
 			appenders.forEach(field => {
 				// if selected a nested field like: {a:{b:1}} -> a.b
 				let targetField;
@@ -77,6 +82,7 @@ export default class Injector {
 					targetField[field] = referenceField[field];
 				}
 			});
+
 			writeFileSync(join(this.projectPath, file), JSON.stringify(targetConfig));
 		});
 	};

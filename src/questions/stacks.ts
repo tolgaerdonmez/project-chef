@@ -5,8 +5,9 @@ import { Question } from "inquirer";
 import kleur from "kleur";
 import { EMPTY_FOLDER } from "../constants";
 
-export const BACKEND_CHOICES: string[] = readdirSync(stackPath("backend"));
-export const FRONTEND_CHOICES: string[] = readdirSync(stackPath("frontend"));
+const filterByFilename = (f: string) => !f.includes(".");
+export const BACKEND_CHOICES: string[] = readdirSync(stackPath("backend")).filter(filterByFilename);
+export const FRONTEND_CHOICES: string[] = readdirSync(stackPath("frontend")).filter(filterByFilename);
 
 export const selectStacks = {
 	name: "stacks",

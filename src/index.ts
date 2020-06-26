@@ -128,6 +128,9 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 
 			// if exists running extra initialization for main stack
 			if (initPath && !process.env.DEV) {
+				if (!fs.existsSync(targetPath)) {
+					fs.mkdirSync(targetPath);
+				}
 				console.log(infoMessage(stack + ": Installing core dependencies..."));
 				const { default: init }: { default: InitFunction } = await import(initPath);
 				const initArgs: InitFunctionArgs = { folderName: fullStack ? folderName : ".", cwd: targetPath };
