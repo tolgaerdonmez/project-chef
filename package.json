@@ -1,6 +1,6 @@
 {
 	"name": "project-chef",
-	"version": "1.0.2",
+	"version": "1.0.4",
 	"main": "dist/index.js",
 	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
@@ -37,5 +37,16 @@
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/tolgaerdonmez/project-chef"
-	}
+	},
+	"keywords": [
+		"cli",
+		"console",
+		"terminal",
+		"templates",
+		"boilerplates",
+		"tsconfig.json",
+		"typescript",
+		"command-line",
+		"prompts"
+	]
 }
