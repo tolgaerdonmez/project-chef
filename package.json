@@ -1,6 +1,6 @@
 {
 	"name": "project-chef",
-	"version": "1.0.75",
+	"version": "1.0.76",
 	"main": "dist/index.js",
 	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
@@ -25,7 +25,7 @@
 		"ncp": "^2.0.0",
 		"nodegit": "^0.26.5",
 		"ora": "^4.0.4",
-		"project-chef-templates": "^1.0.2",
+		"project-chef-templates": "^1.0.32",
 		"rxjs": "^6.5.5",
 		"ts-node": "^8.10.2"
 	},

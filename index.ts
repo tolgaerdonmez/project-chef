@@ -10,20 +10,13 @@ async function main() {
 	checkYarn();
 	//clearing and showing a spinner
 	console.clear();
-	const loadingMessage = ora(infoMessage("loading project-chef")).start();
-	loadingMessage.color = "green";
+	// const loadingMessage = ora(infoMessage("loading project-chef")).start();
+	// loadingMessage.color = "green";
 	// getting the latest templates from github repo
 
-	// these lines are not used until fixed
-	// const gotTemplates = await getTemplates();
-	// if (!gotTemplates) {
-	// 	console.error("Error while fetching templates, try again!");
-	// 	process.exit();
-	// }
+	// loadingMessage.stop(); // stopping spinner
+	await packageMessage(); // showing the package name
 
-	loadingMessage.stop(); // stopping spinner
-
-	packageMessage(); // showing the package name
 	import("./src"); // running the main script by importing
 }
 
