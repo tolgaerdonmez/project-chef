@@ -3,11 +3,9 @@ import { CustomAnswers } from "../types/customAnswers";
 import { StackPaths } from "../types/paths";
 import { readdirSync, existsSync } from "fs";
 import { EMPTY_FOLDER } from "../constants";
+import templatesPath from "project-chef-templates";
 
-const isProd = process.env.PROD !== "false";
-const node_modules_path = isProd ? "../../../node_modules" : "../../node_modules";
-
-export const basePath = join(__dirname, node_modules_path, "project-chef-templates");
+export const basePath = templatesPath;
 export const stackPath = (stack: string) => join(basePath, stack);
 
 export function createStackPaths(stacks: string[], data: CustomAnswers): StackPaths {
