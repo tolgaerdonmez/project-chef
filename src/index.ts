@@ -165,7 +165,8 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 		)
 	) {
 		const files = fs.readdirSync(baseTemplatePath);
-		const essentials = files.filter(f => !(f === ".git" || f === "frontend" || f === "backend"));
+		const includes = [".gitignore", ".prettierrc", "LICENSE"];
+		const essentials = files.filter(f => !!includes.filter(_f => _f === f).length);
 		essentials.forEach(f => {
 			const p = join(baseTemplatePath, f);
 			const dest = join(process.cwd(), projectName, f);

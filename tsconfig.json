@@ -22,5 +22,5 @@
 		"resolveJsonModule": true
 	},
 	"exclude": ["node_modules", "**/*.test.*", "test"],
-	"include": ["./src/**/*.ts", "index.ts", "utils/**/*.ts", "types/**/*.ts", "templates/**/init/**/*.ts"]
+	"include": ["./src/**/*.ts", "index.ts", "utils/**/*.ts", "types/**/*.ts"]
 }

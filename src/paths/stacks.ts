@@ -4,7 +4,10 @@ import { StackPaths } from "../types/paths";
 import { readdirSync, existsSync } from "fs";
 import { EMPTY_FOLDER } from "../constants";
 
-export const basePath = join(__dirname, "../../templates");
+const isProd = process.env.PROD !== "false";
+const node_modules_path = isProd ? "../../../node_modules" : "../../node_modules";
+
+export const basePath = join(__dirname, node_modules_path, "project-chef-templates");
 export const stackPath = (stack: string) => join(basePath, stack);
 
 export function createStackPaths(stacks: string[], data: CustomAnswers): StackPaths {

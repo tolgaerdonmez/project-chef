@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { getTemplates } from "./utils/templates";
+// import { getTemplates } from "./utils/templates";
 import { packageMessage, infoMessage } from "./utils/messages";
 import ora from "ora";
 import { checkYarn } from "./utils/checkYarn";
@@ -15,11 +15,11 @@ async function main() {
 	// getting the latest templates from github repo
 
 	// these lines are not used until fixed
-	const gotTemplates = await getTemplates();
-	if (!gotTemplates) {
-		console.error("Error while fetching templates, try again!");
-		process.exit();
-	}
+	// const gotTemplates = await getTemplates();
+	// if (!gotTemplates) {
+	// 	console.error("Error while fetching templates, try again!");
+	// 	process.exit();
+	// }
 
 	loadingMessage.stop(); // stopping spinner
 

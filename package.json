@@ -1,6 +1,6 @@
 {
 	"name": "project-chef",
-	"version": "1.0.4",
+	"version": "1.0.6",
 	"main": "dist/index.js",
 	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
@@ -25,13 +25,14 @@
 		"ncp": "^2.0.0",
 		"nodegit": "^0.26.5",
 		"ora": "^4.0.4",
+		"project-chef-templates": "^1.0.0",
 		"rxjs": "^6.5.5",
 		"ts-node": "^8.10.2"
 	},
 	"scripts": {
-		"start": "ts-node index.ts",
-		"dev": "DEV=true ts-node index.ts",
-		"build": "tsc",
+		"start": "PROD=false ts-node index.ts",
+		"dev": "PROD=false DEV=true ts-node index.ts",
+		"build": "PROd=true tsc",
 		"test": "DEV=true jest"
 	},
 	"repository": {
