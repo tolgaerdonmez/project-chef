@@ -3,7 +3,7 @@ import { errorMessage, infoMessage, successMessage } from "./messages";
 
 export const checkYarn = () => {
 	try {
-		execSync("yarn --version", { encoding: "utf-8" });
+		execSync("yarn --version", { encoding: "utf-8", stdio: "inherit" });
 	} catch {
 		console.clear();
 		console.log(errorMessage("An error occured while checking yarn!"));

@@ -49,7 +49,7 @@ export default class Injector {
 			this.devPackages.length ? `yarn --cwd ${this.projectPath} add -D ${this.devPackages.join(" ")}` : "",
 		];
 		commands.forEach(c => {
-			if (c) execSync(c);
+			if (c) execSync(c, { stdio: "inherit" });
 		});
 	};
 
