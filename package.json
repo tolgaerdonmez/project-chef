@@ -1,6 +1,6 @@
 {
 	"name": "project-chef",
-	"version": "1.0.77",
+	"version": "1.0.78",
 	"main": "dist/index.js",
 	"bin": "dist/index.js",
 	"author": "Tolga Erdönmez",
