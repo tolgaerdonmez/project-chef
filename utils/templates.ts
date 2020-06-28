@@ -4,6 +4,8 @@ import { readdirSync } from "fs";
 import { checkLocalVersion } from "project-chef-templates";
 import { successMessage, errorMessage, infoMessage } from "./messages";
 import { italic } from "kleur";
+import { execSync } from "child_process";
+import ora from "ora";
 
 const templateURL = "https://github.com/tolgaerdonmez/project-chef-templates.git";
 const templatesPath = join(__dirname, "../templates");
@@ -34,10 +36,15 @@ export const checkTemplateVersion = async () => {
 			console.log("\n");
 			console.log(successMessage("------------------------------------\n"));
 			console.log(successMessage("New version of templates available"));
-			console.log(successMessage("You can install the new version using:"));
-			console.log(infoMessage(italic("yarn global add project-chef-templates")));
 			console.log(successMessage("\n------------------------------------"));
 			console.log("\n");
+
+			const loadingMessage = ora(infoMessage(italic("Upgrading templates"))).start();
+			loadingMessage.color = "green";
+
+			execSync(`yarn --cwd ${__dirname} add project-chef-templates@latest`);
+			loadingMessage.stop(); // stopping spinner
+			console.clear();
 			break;
 		case -1:
 			console.log(errorMessage("An error occured with the network, please try again!"));
