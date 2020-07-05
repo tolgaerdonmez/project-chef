@@ -33,3 +33,5 @@ export const getNestedFields = (levels: string[], object: any): any => {
 	}
 	return object;
 };
+
+export const fixWhitespaces = (text: string) => text.replace(/(\s+)/g, "\\$1");
