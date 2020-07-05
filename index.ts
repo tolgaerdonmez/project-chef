@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
 // import { getTemplates } from "./utils/templates";
-import { packageMessage, infoMessage } from "./utils/messages";
-import ora from "ora";
+import { packageMessage } from "./utils/messages";
+// import ora from "ora";
 import { checkYarn } from "./utils/checkYarn";
 
 async function main() {

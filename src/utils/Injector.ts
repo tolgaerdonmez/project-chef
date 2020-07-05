@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { join } from "path";
 import { statSync, writeFileSync } from "fs";
-import { getNestedFields } from "./misc";
+import { getNestedFields, fixWhitespaces } from "./misc";
 
 const isDev = !!process.env.DEV;
 
@@ -45,8 +45,10 @@ export default class Injector {
 
 	installAllPackages = () => {
 		const commands = [
-			this.packages.length ? `yarn --cwd ${this.projectPath} add ${this.packages.join(" ")}` : "",
-			this.devPackages.length ? `yarn --cwd ${this.projectPath} add -D ${this.devPackages.join(" ")}` : "",
+			this.packages.length ? `yarn --cwd ${fixWhitespaces(this.projectPath)} add ${this.packages.join(" ")}` : "",
+			this.devPackages.length
+				? `yarn --cwd ${fixWhitespaces(this.projectPath)} add -D ${this.devPackages.join(" ")}`
+				: "",
 		];
 		commands.forEach(c => {
 			if (c) execSync(c, { stdio: "inherit" });
