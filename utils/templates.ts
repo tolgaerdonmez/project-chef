@@ -48,6 +48,7 @@ export const checkTemplateVersion = async () => {
 			break;
 		case -1:
 			console.log(errorMessage("An error occured with the network, please try again!"));
+			console.log(infoMessage("Updating project-chef might solve your this problem!"));
 			process.exit();
 		default:
 			break;
