@@ -4,7 +4,7 @@ import { join } from "path";
 import { CustomAnswers } from "./types/customAnswers";
 import { createStackPaths, basePath as baseTemplatePath } from "./paths/stacks";
 import { selectStacks, createStackFrameworkSelect, frameworkExtrasSelect } from "./questions/stacks";
-import { copyContents } from "./utils/file";
+import { copyContents, renamePackageName } from "./utils/file";
 import { StackPaths } from "./types/paths";
 import { Subject } from "rxjs";
 import Injector from "./utils/Injector";
@@ -120,7 +120,8 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 					}
 					return;
 				}
-				// installing main module dependencies
+
+				// copying and then installing main module dependencies
 				console.log(infoMessage(stack + ": Installing core dependencies..."));
 				await copyContents(path, targetPath);
 				installPackages(targetPath);
@@ -151,6 +152,9 @@ prompt.then(({ stacks, ...answers }: CustomAnswers) => {
 					console.log(errorMessage(err.message));
 				}
 			});
+
+			// renaming the package.json name
+			await renamePackageName(projectName, targetPath);
 		});
 	});
 
