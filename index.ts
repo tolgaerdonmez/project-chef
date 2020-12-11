@@ -6,18 +6,18 @@ import { packageMessage } from "./utils/messages";
 import { checkYarn } from "./utils/checkYarn";
 
 async function main() {
-	//checking yarn before doing something further
-	checkYarn();
-	//clearing and showing a spinner
-	console.clear();
-	// const loadingMessage = ora(infoMessage("loading project-chef")).start();
-	// loadingMessage.color = "green";
-	// getting the latest templates from github repo
+  //checking yarn before doing something further
+  checkYarn();
+  //clearing and showing a spinner
+  console.clear();
+  // const loadingMessage = ora(infoMessage("loading project-chef")).start();
+  // loadingMessage.color = "green";
+  // getting the latest templates from github repo
 
-	// loadingMessage.stop(); // stopping spinner
-	await packageMessage(); // showing the package name
+  // loadingMessage.stop(); // stopping spinner
+  await packageMessage(); // showing the package name
 
-	import("./src"); // running the main script by importing
+  import("./src"); // running the main script by importing
 }
 
 main();
